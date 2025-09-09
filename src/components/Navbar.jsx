@@ -1,15 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <div className="w-full text-gray-700 bg-cream">
-      <div className="flex flex-col max-w-screen-xl px-8 mx-auto md:items-center md:justify-between md:flex-row">
-        <div className="flex flex-row items-center justify-between py-6">
-          <div className="relative md:mt-8">
+    <div
+      className={`w-full fixed top-0 left-0 z-50 transition-all duration-300 ${
+        isScrolled ? "bg-cream shadow-md" : "bg-transparent"
+      }`}
+    >
+      <div className="max-w-screen-xl mx-auto px-6 md:px-8">
+        <div className="flex items-center justify-between py-4">
+          {/* ---- Logo ---- */}
+          <div className="relative">
             <a
-              href="#"
+              href="/"
               className="text-lg relative z-50 font-bold tracking-widest text-gray-900 rounded-lg focus:outline-none focus:shadow-outline"
             >
               Dhakshin Ekkam
@@ -26,15 +45,13 @@ function Navbar() {
               />
             </svg>
           </div>
+
+          {/* ---- Hamburger (Mobile only) ---- */}
           <button
-            className="rounded-lg md:hidden focus:outline-none focus:shadow-outline"
+            className="md:hidden rounded-lg focus:outline-none focus:shadow-outline"
             onClick={() => setOpen(!open)}
           >
-            <svg
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              className="w-6 h-6"
-            >
+            <svg fill="currentColor" viewBox="0 0 20 20" className="w-6 h-6">
               {!open ? (
                 <path
                   fillRule="evenodd"
@@ -50,21 +67,53 @@ function Navbar() {
               )}
             </svg>
           </button>
+
+          {/* ---- Desktop Menu ---- */}
+          <nav className="hidden md:flex space-x-6">
+            <a
+              href="/"
+              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+            >
+              Home
+            </a>
+            <a
+              href="/about"
+              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+            >
+              About Us
+            </a>
+            <a
+              href="#"
+              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+            >
+              Blog
+            </a>
+          </nav>
         </div>
 
-        {/* ✅ Fix: completely hide when closed */}
-        <nav
-          className={`${
-            open ? "flex flex-col" : "hidden"
-          } md:flex md:flex-row md:items-center md:justify-end pb-4 md:pb-0`}
-        >
-          <a className="px-4 py-2 mt-2 text-sm md:mt-8 md:ml-4 hover:text-gray-900" href="#">Home</a>
-          <a className="px-4 py-2 mt-2 text-sm md:mt-8 md:ml-4 hover:text-gray-900" href="#">Careers</a>
-          <a className="px-4 py-2 mt-2 text-sm md:mt-8 md:ml-4 hover:text-gray-900" href="#">Blog</a>
-          <a className="px-4 py-2 mt-2 text-sm md:mt-8 md:ml-4 hover:text-gray-900" href="#">About Us</a>
-          <a className="px-10 py-3 mt-2 text-sm text-center bg-white text-gray-800 rounded-full md:mt-8 md:ml-4" href="#">Login</a>
-          <a className="px-10 py-3 mt-2 text-sm text-center bg-yellow-500 text-white rounded-full md:mt-8 md:ml-4" href="#">Sign Up</a>
-        </nav>
+        {/* ---- Mobile Menu ---- */}
+        {open && (
+          <div className="flex flex-col space-y-2 pb-4 md:hidden">
+            <a
+              href="/"
+              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+            >
+              Home
+            </a>
+            <a
+              href="/about"
+              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+            >
+              About Us
+            </a>
+            <a
+              href="#"
+              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+            >
+              Blog
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );
