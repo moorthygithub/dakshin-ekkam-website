@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -20,19 +21,18 @@ function Navbar() {
   return (
     <div
       className={`w-full fixed top-0 left-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-cream shadow-md" : "bg-transparent"
+        isScrolled ? "bg-yellow-100 shadow-md" : "bg-transparent"
       }`}
     >
       <div className="max-w-screen-xl mx-auto px-6 md:px-8">
         <div className="flex items-center justify-between py-4">
-          {/* ---- Logo ---- */}
           <div className="relative">
-            <a
-              href="/"
+            <Link
+              to="/"
               className="text-lg relative z-50 font-bold tracking-widest text-gray-900 rounded-lg focus:outline-none focus:shadow-outline"
             >
               Dhakshin Ekkam
-            </a>
+            </Link>
             <svg
               className="h-11 z-40 absolute -top-2 -left-3"
               viewBox="0 0 79 79"
@@ -68,50 +68,93 @@ function Navbar() {
             </svg>
           </button>
 
-          {/* ---- Desktop Menu ---- */}
           <nav className="hidden md:flex space-x-6">
-            <a
-              href="/"
+            <Link
+              to="/"
               className="px-3 py-2 text-sm font-medium hover:text-gray-900"
             >
               Home
-            </a>
-            <a
-              href="/about"
+            </Link>
+            <Link
+              to="/about"
               className="px-3 py-2 text-sm font-medium hover:text-gray-900"
             >
               About Us
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/gallery"
               className="px-3 py-2 text-sm font-medium hover:text-gray-900"
             >
-              Blog
-            </a>
+              Gallery
+            </Link>
+            <Link
+              to="/member"
+              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+            >
+              Member
+            </Link>
+            <Link
+              to="/community"
+              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+            >
+              Community
+            </Link>
+            <Link
+              to="/contact"
+              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+            >
+              Contact
+            </Link>
           </nav>
         </div>
-
-        {/* ---- Mobile Menu ---- */}
         {open && (
-          <div className="flex flex-col space-y-2 pb-4 md:hidden">
-            <a
-              href="/"
+          <div
+            className={`flex flex-col space-y-2 pb-4 md:hidden ${
+              isScrolled ? "" : "bg-cream"
+            } `}
+          >
+            <Link
+              to="/"
               className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+              onClick={() => setOpen(false)}
             >
               Home
-            </a>
-            <a
-              href="/about"
+            </Link>
+            <Link
+              to="/about"
               className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+              onClick={() => setOpen(false)}
             >
               About Us
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/gallery"
+              onClick={() => setOpen(false)}
               className="px-3 py-2 text-sm font-medium hover:text-gray-900"
             >
-              Blog
-            </a>
+              Gallery
+            </Link>
+            <Link
+              to="/member"
+              onClick={() => setOpen(false)}
+              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+            >
+              Member
+            </Link>
+            <Link
+              to="/community"
+              onClick={() => setOpen(false)}
+              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+            >
+              Community
+            </Link>
+            <Link
+              to="/contact"
+              onClick={() => setOpen(false)}
+              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+            >
+              Contact
+            </Link>
           </div>
         )}
       </div>

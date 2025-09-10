@@ -1,6 +1,6 @@
 function AboutUsDetails() {
   return (
-    <div className="container px-4 lg:px-8 mx-auto max-w-screen-xl text-gray-700 ">
+    <div className="container px-4 lg:px-8 mx-auto max-w-screen-xl text-gray-700">
       <div className="sm:flex items-center sm:space-x-8">
         <div data-aos="fade-right" className="sm:w-1/2 relative">
           <div className="bg-yellow-500 rounded-full absolute w-12 h-12  -left-4 -top-3 animate-pulse"></div>

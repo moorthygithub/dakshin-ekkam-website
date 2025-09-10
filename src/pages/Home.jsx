@@ -19,7 +19,7 @@ function Home() {
       <AllInOne />
       <LatestNews />
       <Info />
-      <AboutUsDetails />
+      {/* <AboutUsDetails />
       <UserInterface />
       <ToolsForTeachers />
       <Assessments />
@@ -27,7 +27,7 @@ function Home() {
       <OneOnOneDiscussions />
       <SeeMoreFeatures />
       <Integrations />
-      <Testimonial />
+      <Testimonial /> */}
     </div>
   );
 }

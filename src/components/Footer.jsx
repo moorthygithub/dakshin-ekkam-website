@@ -1,6 +1,6 @@
 function Footer() {
   return (
-    <footer style={{ backgroundColor: "rgba(37, 38, 65, 1)" }}>
+    <footer style={{ backgroundColor: "rgba(37, 38, 65, 1)" }} >
       <div className="max-w-lg mx-auto">
         <div className="flex py-12 justify-center text-white items-center px-20 sm:px-36">
           <div className="relative">

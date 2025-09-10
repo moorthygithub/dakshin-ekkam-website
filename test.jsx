@@ -1,78 +1,48 @@
-import React from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import ImageSlider from "./ImageCarsol";
 
-const teamMembers = [
-  { name: "Chairperson Name", role: "Chairperson", img: "/img/profile.png" },
-  {
-    name: "Stefan Mikic",
-    role: "Head of Development",
-    img: "/img/profile.png",
-  },
-  { name: "Marko Vukic", role: "Head of Development", img: "/img/profile.png" },
-  { name: "Tamara Vitas", role: "Project Manager", img: "/img/profile.png" },
-];
-
-const TeamCarousel = () => {
-  const settings = {
-    autoplay: true,
-    autoplaySpeed: 2500,
-    dots: false,
-    arrows: false,
-    infinite: true,
-    speed: 600,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    responsive: [
-      { breakpoint: 1280, settings: { slidesToShow: 2 } },
-      { breakpoint: 768, settings: { slidesToShow: 1 } },
-    ],
-  };
-
+function AboutSection() {
   return (
-    <section className="relative bg-gray-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="text-4xl font-bold text-center mb-3">Our ChairPerson</h2>
-        <p className="text-center text-gray-600 mb-8">
-          Meet our amazing chairperson and team members.
-        </p>
-
-        <div className="team-carousel relative mt-20">
-          <style>{`
-            /* Force slides to respect container width */
-            .team-carousel .slick-slide > div {
-              display: flex;
-              justify-content: center;
-              width: 100% !important;
-            }
-            .team-carousel .slick-prev,
-            .team-carousel .slick-next {
-              z-index: 40;
-            }
-          `}</style>
-
-          <Slider {...settings}>
-            {teamMembers.map((member, index) => (
-              <div key={index} className="px-3 sm:px-4">
-                <div className="team-card bg-yellow-100 rounded-xl shadow-lg p-6 pt-16 text-center flex flex-col items-center relative z-10">
-                  <img
-                    src={member.img}
-                    alt={member.name}
-                    className="w-28 h-28 rounded-full border-4 border-white shadow-md absolute -top-14 left-1/2 transform -translate-x-1/2 object-cover z-20"
-                  />
-                  <h3 className="text-lg font-bold text-gray-900 mt-16">
-                    {member.name}
-                  </h3>
-                  <p className="text-sm text-gray-500 mb-4">{member.role}</p>
-                </div>
-              </div>
-            ))}
-          </Slider>
+    <div className="container px-4 lg:px-8 mx-auto max-w-screen-xl text-gray-700 ">
+      <div className="mt-24 flex flex-col-reverse md:flex-row items-start md:space-x-10">
+        <ImageSlider />
+        <div data-aos="zoom-in-left" className="md:w-5/12">
+          <h1 className="font-semibold text-darken text-2xl lg:pr-30">
+            Our Story How Ekkam Started?
+          </h1>
+          <p className="text-gray-500 my-5 lg:pr-10">
+            Lorem ipsum dolor sit amet et delectus accommodare his consul
+            copiosae legendos at vix ad putent delectus delicata usu. Vidit
+            dissentiet eos cu eum an brute copiosae hendrerit. Eos.
+          </p>
+          <p className="text-gray-500 my-5 lg:pr-10">
+            Some of the students and teachers were greatly helped by the
+            Dhakshin Ekkam.
+          </p>
+          <p className="text-gray-500 my-5 lg:pr-10">
+            Lorem ipsum dolor sit amet et delectus accommodare his consul
+            copiosae legendos at vix ad putent delectus delicata usu. Vidit
+            dissentiet eos cu eum an brute copiosae hendrerit. Eos
+          </p>
+          <button className="flex items-center space-x-3 pl-3 border-b border-l border-t border-yellow-500 text-yellow-500 font-medium my-4 focus:outline-none transform transition hover:scale-110 duration-300 ease-in-out rounded-full">
+            <span>More Info</span>
+            <div className="border border-yellow-500 h-14 w-14 rounded-full flex items-center justify-center">
+              <svg
+                className="w-5 h-5"
+                viewBox="0 0 26 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M25.7071 8.70711C26.0976 8.31658 26.0976 7.68342 25.7071 7.2929L19.3431 0.928934C18.9526 0.538409 18.3195 0.538409 17.9289 0.928934C17.5384 1.31946 17.5384 1.95262 17.9289 2.34315L23.5858 8L17.9289 13.6569C17.5384 14.0474 17.5384 14.6805 17.9289 15.0711C18.3195 15.4616 18.9526 15.4616 19.3431 15.0711L25.7071 8.70711ZM-8.74228e-08 9L25 9L25 7L8.74228e-08 7L-8.74228e-08 9Z"
+                  fill="#F48C06"
+                />
+              </svg>
+            </div>
+          </button>
         </div>
       </div>
-    </section>
+    </div>
   );
-};
+}
 
-export default TeamCarousel;
+export default AboutSection;
