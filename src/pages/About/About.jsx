@@ -1,5 +1,7 @@
+import AboutSection from "../../components/AboutSection";
 import AboutUsDetails from "../../components/EverythingYouCanDo";
 import HeroSub from "../../components/HeroSub";
+import ChairPeronCarousel from "../../components/ChairPeronCarousel";
 import TeamCarousel from "../../components/TeamCarousel";
 
 const About = () => {
@@ -11,10 +13,12 @@ const About = () => {
     <>
       <HeroSub
         title="About Us"
-        description=""
+        description="Discover who we are, what we do, and how we work together to create meaningful experiences."
         breadcrumbLinks={breadcrumbLinks}
       />
       <AboutUsDetails />
+      <ChairPeronCarousel />
+      <AboutSection />
       <TeamCarousel />
     </>
   );

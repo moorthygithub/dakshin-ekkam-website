@@ -4,8 +4,7 @@ import Breadcrumb from "./Breadcrumb";
 
 const HeroSub = ({ title, description, breadcrumbLinks }) => {
   return (
-    <header className="relative bg-cream">
-      {/* Content */}
+    <header className="relative bg-cream max-w-full">
       <section className="relative z-20 pt-24 pb-16 lg:pt-28 lg:pb-20">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto">
@@ -19,7 +18,6 @@ const HeroSub = ({ title, description, breadcrumbLinks }) => {
               </p>
             )}
 
-            {/* Breadcrumb */}
             <div className="mt-6">
               <Breadcrumb links={breadcrumbLinks} />
             </div>
@@ -27,7 +25,6 @@ const HeroSub = ({ title, description, breadcrumbLinks }) => {
         </div>
       </section>
 
-      {/* Wave (doesn't block clicks now) */}
       <div className="text-white -mt-14 sm:-mt-24 lg:-mt-36 z-0 relative">
         <svg
           className="xl:h-40 xl:w-full"
@@ -44,8 +41,7 @@ const HeroSub = ({ title, description, breadcrumbLinks }) => {
         <div className="bg-white w-full h-20 -mt-px"></div>
       </div>
 
-      {/* Spacer so next section isn't hidden */}
-      <div className="bg-white h-12 relative z-0" />
+      {/* <div className="bg-white h-12 relative z-0" /> */}
     </header>
   );
 };

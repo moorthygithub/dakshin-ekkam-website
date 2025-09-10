@@ -1,6 +1,6 @@
 function AllInOne() {
   return (
-    <div className="container px-4 lg:px-8 mx-auto max-w-screen-xl text-gray-700 ">
+    <div className="container px-4 lg:px-8 mx-auto max-w-screen-xl text-gray-700">
       <div data-aos="flip-up" className="max-w-xl mx-auto text-center mt-24">
         <h1 className="font-bold text-darken my-3 text-2xl">
           All-In-One <span className="text-yellow-500">Community Hub.</span>

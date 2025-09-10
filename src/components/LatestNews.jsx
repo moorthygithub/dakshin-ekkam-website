@@ -1,6 +1,6 @@
 function LatestNews() {
   return (
-    <div className="container px-4 lg:px-8 mx-auto max-w-screen-xl text-gray-700 ">
+    <div className="container px-4 lg:px-8 mx-auto max-w-screen-xl text-gray-700">
       <div data-aos="zoom-in" className="mt-16 text-center">
         <h1 className="text-darken text-2xl font-semibold">
           Latest Community Events

@@ -4,81 +4,98 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const teamMembers = [
-  { name: "Chairperson Name", role: "Chairperson", img: "/img/profile.png" },
   {
-    name: "Stefan Mikic",
-    role: "Head of Development",
+    name: "John Doe",
+    role: "CEO",
+    company: "Company A",
     img: "/img/profile.png",
+    description:
+      "Lorem ipsum dolor sit amet et delectus accommodare his consul copiosae legendos",
   },
-  { name: "Marko Vukic", role: "Head of Development", img: "/img/profile.png" },
-  { name: "Tamara Vitas", role: "Project Manager", img: "/img/profile.png" },
-  // ... more members
+  {
+    name: "Jane Smith",
+    role: "CTO",
+    company: "Company B",
+    img: "/img/profile.png",
+    description:
+      "Lorem ipsum dolor sit amet et delectus accommodare his consul copiosae legendos",
+  },
+  {
+    name: "Mark Wilson",
+    role: "Designer",
+    company: "Company C",
+    img: "/img/profile.png",
+    description:
+      "Lorem ipsum dolor sit amet et delectus accommodare his consul copiosae legendos",
+  },
+  {
+    name: "Lucy Brown",
+    role: "Developer",
+    company: "Company D",
+    img: "/img/profile.png",
+    description:
+      "Lorem ipsum dolor sit amet et delectus accommodare his consul copiosae legendos",
+  },
 ];
 
 const TeamCarousel = () => {
   const settings = {
-    autoplay: true,
-    autoplaySpeed: 2500,
     dots: false,
     arrows: false,
     infinite: true,
-    speed: 600,
-    slidesToShow: 3, // default for desktops
+    speed: 500,
+    slidesToShow: 3,
     slidesToScroll: 1,
     responsive: [
-      {
-        breakpoint: 1280, // xl screens
-        settings: { slidesToShow: 2 },
-      },
-      {
-        breakpoint: 768, // tablets & below
-        settings: { slidesToShow: 1 },
-      },
+      { breakpoint: 1024, settings: { slidesToShow: 2 } },
+      { breakpoint: 640, settings: { slidesToShow: 1 } },
     ],
   };
 
   return (
-    <section className="relative bg-gray-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="text-4xl font-bold text-center mb-3">Our ChairPerson</h2>
-        <p className="text-center text-gray-600 mb-8">
+    <section className="container mx-auto px-4 lg:px-8 py-12 text-gray-700 ">
+      <div data-aos="flip-up" className="max-w-xl mx-auto text-center mt-24">
+        <h1 className="font-bold text-darken my-3 text-2xl">
+          Meet the <span className="text-yellow-500">Team.</span>
+        </h1>
+        <p className="leading-relaxed text-gray-500">
           Meet our amazing chairperson and team members.
         </p>
+      </div>
 
-        <div className="team-carousel relative mt-20">
-          {/* <style>{`
-            .team-carousel .slick-list,
-            .team-carousel .slick-track,
-            .team-carousel .slick-slide {
-              overflow: visible !important;
-            }
-       
+      <Slider {...settings} className="space-x-4 mt-12">
+        {teamMembers.map((member, idx) => (
+          <div
+            key={idx}
+            className="px-2 py-2"
+            data-aos="fade-up"
+            data-aos-delay={idx * 150}
+          >
+            <div className="bg-cream rounded-lg shadow-md p-6 flex flex-col">
+              {member.description && (
+                <p className="mb-4 text-gray-700 text-center">
+                  {member.description}
+                </p>
+              )}
 
-          `}</style> */}
-
-          <Slider {...settings}>
-            {teamMembers.map((member, index) => (
-              <div
-                key={index}
-                className="px-3 sm:px-4"
-                style={{ display: "flex", justifyContent: "center" }}
-              >
-                <div className="team-card bg-yellow-100 rounded-xl shadow-lg p-6 pt-16 text-center flex flex-col items-center relative">
+              <div className="grid grid-cols-3 gap-4 items-start w-full">
+                <div className="flex justify-start col-span-1">
                   <img
                     src={member.img}
                     alt={member.name}
-                    className="w-28 h-28 rounded-full border-4 border-white shadow-md absolute -top-14 left-1/2 transform -translate-x-1/2 object-cover z-30"
+                    className="w-12 h-12 rounded-full object-cover"
                   />
-                  <h3 className="text-lg font-bold text-gray-900 mt-16">
-                    {member.name}
-                  </h3>
-                  <p className="text-sm text-gray-500 mb-4">{member.role}</p>
+                </div>
+
+                <div className="flex flex-col justify-start items-center col-span-2">
+                  <h3 className="font-semibold text-lg">{member.name}</h3>
+                  <p className="text-sm text-gray-500">{member.company}</p>
                 </div>
               </div>
-            ))}
-          </Slider>
-        </div>
-      </div>
+            </div>
+          </div>
+        ))}
+      </Slider>
     </section>
   );
 };
