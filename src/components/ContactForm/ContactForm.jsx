@@ -99,6 +99,7 @@ const ContactForm = () => {
               onSubmit={handleSubmit}
               className="flex flex-wrap  w-full m-auto justify-between"
               data-aos="fade-right"
+              data-aos-delay="500"
             >
               <div className="sm:flex gap-3 w-full">
                 <InputField
@@ -144,7 +145,7 @@ const ContactForm = () => {
                   error={errors.Message}
                 />
               </div>
-              <div className="mx-0 my-2.5 w-full">
+              <div className="mx-0 my-2.5 w-full flex justify-center">
                 <button
                   type="submit"
                   disabled={!isFormValid || loader}
@@ -166,7 +167,7 @@ const ContactForm = () => {
               </div>
             )}
           </div>
-          <div className="col-span-6" data-aos="fade-up">
+          <div className="col-span-6" data-aos="fade-up" data-aos-delay="700">
             <img
               src="/img/contact.webp"
               alt="Contact"

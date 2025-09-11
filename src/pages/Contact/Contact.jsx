@@ -1,3 +1,4 @@
+import PageMeta from "../../components/common/PageMeta";
 import ContactForm from "../../components/ContactForm/ContactForm";
 import ContactInfo from "../../components/ContactForm/ContactInfo";
 import ContactLocation from "../../components/ContactForm/ContactLocation";
@@ -10,6 +11,7 @@ const Contact = () => {
   ];
   return (
     <>
+      <PageMeta title="Contact | Dhakshin Ekkam" />
       <HeroSub
         title="Contact"
         description="We’d love to hear from you! Whether you have questions, suggestions, or just want to connect, our team is here to help. Reach out to us and become part of a growing community built on care, support, and togetherness."

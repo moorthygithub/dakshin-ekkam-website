@@ -1,170 +1,369 @@
-import { useState } from "react";
-import { User, Mail, Phone, MapPin, Users } from "lucide-react";
+import {
+  Book,
+  Calendar,
+  Group,
+  Heart,
+  Loader,
+  Mail,
+  Phone,
+  User
+} from "lucide-react";
+import { useRef, useState } from "react";
+import { MarriedStatus } from "../../constants/selectOptions";
+import {
+  useFetchBloodGroup,
+  useFetchBranch,
+  useFetchOccupation,
+} from "../../hooks/useApi";
+import { useApiMutation } from "../../hooks/useApiMutation";
+import { showErrorToast, showSuccessToast } from "../../utils/toast";
 import InputField from "../common/InputField";
 import SelectField from "../common/SelectField";
 
-const CommunityForm = () => {
+const CommunityForm = ({ isEditMode = false }) => {
   const [formData, setFormData] = useState({
-    fullName: "",
+    first_name: "",
+    middle_name: "",
+    last_name: "",
+    user_dob: "",
+    user_blood_group: "",
+    mobile: "",
+    user_whatsapp: "",
     email: "",
-    phone: "",
-    address: "",
-    familyMembers: "",
-    gender: "",
-    communityType: "",
-    occupation: "",
+    user_occupation: "",
+    branch_id: "",
+    user_education: "",
+    resi_address: "",
+    place_of_residence: "",
+    native_place: "",
+    user_doa: "",
+    user_married_status: "",
+    user_group_mid: "",
   });
+  const { trigger: submitTrigger, loading: submitLoading } = useApiMutation();
 
   const [errors, setErrors] = useState({});
+  const { data: blodGroupdata } = useFetchBloodGroup();
+  const { data: branchdata } = useFetchBranch();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const { data: occupationdata } = useFetchOccupation();
+  const fieldRefs = {
+    first_name: useRef(null),
+    email: useRef(null),
+    mobile: useRef(null),
+    resi_address: useRef(null),
+    user_occupation: useRef(null),
+    branch_id: useRef(null),
+    user_blood_group: useRef(null),
   };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
 
+    if (name == "mobile" || name == "user_whatsapp") {
+      const numericValue = value.replace(/\D/g, ""); // remove non-digits
+      if (numericValue.length <= 10) {
+        setFormData({ ...formData, [name]: numericValue });
+        setErrors({ ...errors, [name]: "" });
+      }
+      return;
+    }
+
+    // For other fields
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: "" });
+  };
   const validate = () => {
     let newErrors = {};
 
-    if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
+    if (!formData.first_name?.trim())
+      newErrors.first_name = "First name is required";
+
     if (!formData.email) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Enter a valid email";
     }
 
-    if (!formData.phone) {
-      newErrors.phone = "Phone number is required";
-    } else if (!/^[0-9]{10}$/.test(formData.phone)) {
-      newErrors.phone = "Enter a valid 10-digit phone number";
+    if (!formData.mobile) {
+      newErrors.mobile = "Mobile number is required";
+    } else if (!/^[0-9]{10}$/.test(formData.mobile)) {
+      newErrors.mobile = "Enter a valid 10-digit number";
     }
 
-    if (!formData.address.trim()) newErrors.address = "Address is required";
+    if (!formData.resi_address?.trim())
+      newErrors.resi_address = "Address is required";
 
-    if (!formData.familyMembers) {
-      newErrors.familyMembers = "Number of family members is required";
-    } else if (isNaN(formData.familyMembers) || formData.familyMembers <= 0) {
-      newErrors.familyMembers = "Enter a valid number";
-    }
+    if (!formData.user_occupation?.trim())
+      newErrors.user_occupation = "Occupation is required";
 
-    if (!formData.gender) newErrors.gender = "Please select gender";
-    if (!formData.communityType)
-      newErrors.communityType = "Please select community type";
+    if (!formData.branch_id) newErrors.branch_id = "Branch is required";
 
-    if (!formData.occupation.trim())
-      newErrors.occupation = "Occupation is required";
+    if (!formData.user_blood_group)
+      newErrors.user_blood_group = "Blood group is required";
 
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length === 0) {
-      console.log("Community Registration Submitted:", formData);
-      alert("Registration Successful 🎉");
+    if (Object.keys(validationErrors).length > 0) {
+      const firstErrorKey = Object.keys(validationErrors)[0];
+      const ref = fieldRefs[firstErrorKey];
+      if (ref?.current) {
+        ref.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "nearest",
+        });
+      }
+      return;
+    }
+
+    try {
+      const response = await submitTrigger({
+        url: "/create-member",
+        method: "post",
+        data: formData,
+      });
+
+      if (response?.code === 201) {
+        showSuccessToast(response.message || "Member created successfully!");
+
+        setFormData({
+          first_name: "",
+          middle_name: "",
+          last_name: "",
+          user_dob: "",
+          user_blood_group: "",
+          mobile: "",
+          user_whatsapp: "",
+          email: "",
+          user_occupation: "",
+          branch_id: "",
+          user_education: "",
+          resi_address: "",
+          place_of_residence: "",
+          native_place: "",
+          user_doa: "",
+          user_married_status: "",
+          user_group_mid: "",
+        });
+      } else {
+        showErrorToast(response.message || "Something went wrong");
+      }
+    } catch (error) {
+      showErrorToast(error?.response?.data?.message || "Failed to submit");
     }
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-6xl mx-auto bg-white  my-6  px-6"
+      className="max-w-6xl mx-auto bg-white my-6 px-6"
     >
       <h2 className="text-xl font-semibold mb-4 text-gray-800">
         Community Registration Form
       </h2>
-
+      {/* <ToastDemo /> */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <InputField
-          label="Full Name"
-          name="fullName"
-          value={formData.fullName}
+          ref={fieldRefs.first_name}
+          label="First Name"
+          name="first_name"
+          value={formData.first_name}
           onChange={handleChange}
-          placeholder="Enter your full name"
+          placeholder="Enter first name"
           startIcon={<User size={18} />}
-          error={errors.fullName}
+          error={errors.first_name}
+          required
+        />
+        <InputField
+          label="Middle Name"
+          name="middle_name"
+          value={formData.middle_name}
+          onChange={handleChange}
+          placeholder="Enter middle name"
+        />
+        <InputField
+          label="Last Name"
+          name="last_name"
+          value={formData.last_name}
+          onChange={handleChange}
+          placeholder="Enter last name"
         />
 
+        {/* DOB */}
+        <InputField
+          label="Date of Birth"
+          type="date"
+          name="user_dob"
+          value={formData.user_dob}
+          onChange={handleChange}
+          startIcon={<Calendar size={18} />}
+        />
+
+        {/* Blood Group */}
+        <SelectField
+          label="Blood Group"
+          name="user_blood_group"
+          value={formData.user_blood_group}
+          onChange={handleChange}
+          options={
+            blodGroupdata?.data?.map((blood) => ({
+              value: blood.blood_group,
+              label: blood.blood_group,
+            })) || []
+          }
+          error={errors.user_blood_group}
+          required
+          ref={fieldRefs.user_blood_group}
+        />
+
+        {/* Contact */}
         <InputField
           label="Email"
           type="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
-          placeholder="Enter your email"
+          placeholder="Enter email"
           startIcon={<Mail size={18} />}
           error={errors.email}
+          required
+          ref={fieldRefs.email}
         />
-
         <InputField
-          label="Phone Number"
+          label="Mobile"
           type="text"
-          name="phone"
-          value={formData.phone}
+          name="mobile"
+          value={formData.mobile}
           onChange={handleChange}
-          placeholder="Enter 10-digit phone"
+          placeholder="Enter 10-digit number"
           startIcon={<Phone size={18} />}
-          error={errors.phone}
+          error={errors.mobile}
+          required
+          ref={fieldRefs.mobile}
         />
+        <InputField
+          label="WhatsApp"
+          type="text"
+          name="user_whatsapp"
+          value={formData.user_whatsapp}
+          onChange={handleChange}
+          placeholder="Enter WhatsApp number"
+        />
+
+        {/* Address */}
 
         <InputField
-          label="Address"
-          name="address"
-          value={formData.address}
+          label="Place of Residence"
+          name="place_of_residence"
+          value={formData.place_of_residence}
           onChange={handleChange}
-          placeholder="Enter your address"
-          startIcon={<MapPin size={18} />}
-          error={errors.address}
+          placeholder="Enter place of residence"
         />
-
         <InputField
-          label="Family Members"
-          type="number"
-          name="familyMembers"
-          value={formData.familyMembers}
+          label="Native Place"
+          name="native_place"
+          value={formData.native_place}
           onChange={handleChange}
-          placeholder="Enter number of family members"
-          startIcon={<Users size={18} />}
-          error={errors.familyMembers}
+          placeholder="Enter native place"
         />
 
-        {/* Gender Dropdown */}
+        {/* Education & Occupation */}
+        <InputField
+          label="Education"
+          name="user_education"
+          value={formData.user_education}
+          onChange={handleChange}
+          placeholder="Enter education"
+          startIcon={<Book size={18} />}
+        />
         <SelectField
-          label="Gender"
-          name="gender"
-          value={formData.gender}
-          onChange={handleChange}
-          options={["Male", "Female", "Other"]}
-          error={errors.gender}
-        />
-
-        {/* Community Type Dropdown */}
-        <SelectField
-          label="Community Type"
-          name="communityType"
-          value={formData.communityType}
-          onChange={handleChange}
-          options={["General", "OBC", "SC", "ST", "Other"]}
-          error={errors.communityType}
-        />
-
-        {/* Occupation */}
-        <InputField
           label="Occupation"
-          name="occupation"
-          value={formData.occupation}
+          name="user_occupation"
+          value={formData.user_occupation}
           onChange={handleChange}
-          placeholder="Enter your occupation"
-          error={errors.occupation}
+          options={
+            occupationdata?.data?.map((occupation) => ({
+              value: occupation.occupation,
+              label: occupation.occupation,
+            })) || []
+          }
+          error={errors.user_occupation}
+          required
+          ref={fieldRefs.user_occupation}
         />
+        <SelectField
+          label="Branch"
+          name="branch_id"
+          value={formData.branch_id}
+          onChange={handleChange}
+          options={
+            branchdata?.data?.map((branchdata) => ({
+              value: String(branchdata.id),
+              label: branchdata.branch_name,
+            })) || []
+          }
+          error={errors.branch_id}
+          required
+          ref={fieldRefs.branch_id}
+        />
+
+        <SelectField
+          label="Marital Status"
+          name="user_married_status"
+          value={formData.user_married_status}
+          onChange={handleChange}
+          options={MarriedStatus}
+          error={errors.user_married_status}
+        />
+
+        <InputField
+          label="Date of Anniversary"
+          type="date"
+          name="user_doa"
+          value={formData.user_doa}
+          onChange={handleChange}
+          startIcon={<Heart size={18} />}
+        />
+
+        {/* Group ID */}
+        <InputField
+          label="MID"
+          name="user_group_mid"
+          value={formData.user_group_mid}
+          onChange={handleChange}
+          placeholder="Enter MID"
+          startIcon={<Group size={18} />}
+        />
+        <div className="md:col-span-2">
+          <InputField
+            label="Residential Address"
+            name="resi_address"
+            type="textarea"
+            value={formData.resi_address}
+            onChange={handleChange}
+            placeholder="Enter your address"
+            error={errors.resi_address}
+            required
+            ref={fieldRefs.resi_address}
+          />
+        </div>
       </div>
 
       <button
         type="submit"
-        className="w-full mt-3 bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg transition"
+        disabled={submitLoading}
+        className={`w-full mt-3 bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg transition flex items-center justify-center gap-2 ${
+          submitLoading ? "cursor-not-allowed opacity-70" : ""
+        }`}
       >
-        Register
+        {submitLoading && <Loader className="w-5 h-5 animate-spin" />}
+        {submitLoading ? "Submitting..." : "Register"}
       </button>
     </form>
   );

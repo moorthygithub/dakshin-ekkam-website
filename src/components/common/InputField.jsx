@@ -8,6 +8,8 @@ const InputField = ({
   startIcon,
   error,
   rows = 4,
+  required,
+  ref,
 }) => {
   return (
     <div className="w-full mb-4">
@@ -17,6 +19,7 @@ const InputField = ({
           className="block text-sm font-medium text-gray-700 mb-1"
         >
           {label}
+          {required && <span className="text-red-600 ml-1">*</span>}
         </label>
       )}
 
@@ -44,6 +47,7 @@ const InputField = ({
             id={name}
             name={name}
             type={type}
+            ref={ref}
             value={value}
             onChange={onChange}
             placeholder={placeholder}

@@ -1,3 +1,4 @@
+import PageMeta from "../../components/common/PageMeta";
 import GalleryCard from "../../components/GalleryCard";
 import HeroSub from "../../components/HeroSub";
 
@@ -8,6 +9,7 @@ const Gallery = () => {
   ];
   return (
     <>
+      <PageMeta title="Gallery | Dhakshin Ekkam" />
       <HeroSub
         title="Gallery"
         description="Explore moments captured from our events, celebrations, and community gatherings. Our gallery showcases the spirit, culture Dhakshin Ekkam."
