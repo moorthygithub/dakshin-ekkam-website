@@ -51,7 +51,7 @@ const MemberForm = () => {
       onSubmit={handleSubmit}
       className="max-w-md mx-auto bg-white shadow-md my-6 rounded-xl p-6"
     >
-      <h2 className="text-xl font-semibold mb-4 text-gray-800">Member Form</h2>
+      <h2 className="text-xl font-semibold mb-4 text-gray-800">Member Area</h2>
 
       {/* <InputField
         label="Full Name"

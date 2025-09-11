@@ -17,7 +17,6 @@ const Chevron = ({ className = "" }) => (
     />
   </svg>
 );
-
 const CustomSelect = ({
   label,
   name,
@@ -26,12 +25,13 @@ const CustomSelect = ({
   options = [],
   error,
   placeholder,
+  required,
+  ref,
 }) => {
   const [open, setOpen] = useState(false);
   const [highlighted, setHighlighted] = useState(-1);
   const containerRef = useRef(null);
 
-  // close when clicking outside
   useEffect(() => {
     function handleClickOutside(e) {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
@@ -42,15 +42,15 @@ const CustomSelect = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // when opened, highlight current value
   useEffect(() => {
-    setHighlighted(options.indexOf(value));
+    const index = options.findIndex((opt) => opt.value === value);
+    setHighlighted(index);
   }, [open, value, options]);
 
   const toggle = () => setOpen((s) => !s);
 
   const selectOption = (opt) => {
-    if (onChange) onChange({ target: { name, value: opt } });
+    if (onChange) onChange({ target: { name, value: opt.value } });
     setOpen(false);
   };
 
@@ -58,24 +58,15 @@ const CustomSelect = ({
     if (e.key === "ArrowDown") {
       e.preventDefault();
       setOpen(true);
-      setHighlighted((h) => {
-        const next = h < options.length - 1 ? h + 1 : 0;
-        return next;
-      });
+      setHighlighted((h) => (h < options.length - 1 ? h + 1 : 0));
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       setOpen(true);
-      setHighlighted((h) => {
-        const prev = h > 0 ? h - 1 : options.length - 1;
-        return prev;
-      });
+      setHighlighted((h) => (h > 0 ? h - 1 : options.length - 1));
     } else if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      if (open) {
-        if (highlighted >= 0) selectOption(options[highlighted]);
-      } else {
-        setOpen(true);
-      }
+      if (open && highlighted >= 0) selectOption(options[highlighted]);
+      else setOpen(true);
     } else if (e.key === "Escape") {
       setOpen(false);
     }
@@ -85,7 +76,7 @@ const CustomSelect = ({
     <div className="relative flex flex-col w-full" ref={containerRef}>
       {label && (
         <label className="text-sm font-medium text-gray-700 mb-1">
-          {label}
+          {label} {required && <span className="text-red-600 ml-1">*</span>}
         </label>
       )}
 
@@ -95,6 +86,7 @@ const CustomSelect = ({
         aria-expanded={open}
         onClick={toggle}
         onKeyDown={onKeyDown}
+        ref={ref}
         className={`w-full text-left border rounded-lg px-3 py-2 flex items-center justify-between focus:outline-none focus:ring-2 ${
           error
             ? "border-red-500 focus:ring-red-400"
@@ -102,7 +94,9 @@ const CustomSelect = ({
         }`}
       >
         <span className={`${value ? "text-gray-800" : "text-gray-400"}`}>
-          {value || placeholder || `Select ${label}`}
+          {options.find((opt) => opt.value === value)?.label ||
+            placeholder ||
+            `Select ${label}`}
         </span>
         <Chevron
           className={`w-4 h-4 text-gray-600 transition-transform ${
@@ -125,7 +119,8 @@ const CustomSelect = ({
             onMouseEnter={() => setHighlighted(-1)}
             onMouseDown={(e) => {
               e.preventDefault();
-              selectOption("");
+              if (onChange) onChange({ target: { name, value: "" } });
+              setOpen(false);
             }}
             className={`cursor-pointer px-3 py-2 text-sm ${
               highlighted === -1 ? "bg-yellow-100" : ""
@@ -136,10 +131,10 @@ const CustomSelect = ({
 
           {options.map((opt, idx) => {
             const isHighlighted = highlighted === idx;
-            const isSelected = value === opt;
+            const isSelected = value === opt.value;
             return (
               <li
-                key={idx}
+                key={opt.value}
                 role="option"
                 aria-selected={isSelected}
                 onMouseEnter={() => setHighlighted(idx)}
@@ -151,7 +146,7 @@ const CustomSelect = ({
                   isHighlighted ? "bg-yellow-100" : ""
                 } ${isSelected ? "font-semibold" : ""}`}
               >
-                {opt}
+                {opt.label}
               </li>
             );
           })}

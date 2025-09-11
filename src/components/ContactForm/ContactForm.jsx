@@ -145,7 +145,7 @@ const ContactForm = () => {
                   error={errors.Message}
                 />
               </div>
-              <div className="mx-0 my-2.5 w-full">
+              <div className="mx-0 my-2.5 w-full flex justify-center">
                 <button
                   type="submit"
                   disabled={!isFormValid || loader}

@@ -1,9 +1,9 @@
 import AboutSection from "../../components/AboutSection";
-import AboutUsDetails from "../../components/EverythingYouCanDo";
 import HeroSub from "../../components/HeroSub";
 import ChairPeronCarousel from "../../components/ChairPeronCarousel";
 import TeamCarousel from "../../components/TeamCarousel";
 import PageMeta from "../../components/common/PageMeta";
+import AboutUsDetails from "../../components/AboutUsDetails";
 
 const About = () => {
   const breadcrumbLinks = [
