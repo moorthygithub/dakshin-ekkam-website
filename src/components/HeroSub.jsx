@@ -8,17 +8,24 @@ const HeroSub = ({ title, description, breadcrumbLinks }) => {
       <section className="relative z-20 pt-24 pb-16 lg:pt-28 lg:pb-20">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900">
+            <h1
+              className="text-4xl md:text-6xl font-bold text-gray-900"
+              data-aos="fade-right"
+            >
               {title}
             </h1>
 
             {description && (
-              <p className="mt-4 md:text-xl text-lg text-gray-600">
+              <p
+                className="mt-4 md:text-xl text-lg text-gray-600"
+                data-aos="fade-down"
+                data-aos-delay="300"
+              >
                 {description}
               </p>
             )}
 
-            <div className="mt-6">
+            <div className="mt-6" data-aos="fade-up" data-aos-delay="700">
               <Breadcrumb links={breadcrumbLinks} />
             </div>
           </div>

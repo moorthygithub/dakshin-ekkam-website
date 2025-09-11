@@ -107,56 +107,61 @@ function Navbar() {
             </Link>
           </nav>
         </div>
-        {open && (
-          <div
-            className={`flex flex-col space-y-2 pb-4 md:hidden ${
-              isScrolled ? "" : "bg-cream"
-            } `}
+        {/* {open && (
+          // <div
+          //   className={`flex flex-col space-y-2  pb-4 md:hidden ${
+          //     isScrolled ? "" : "bg-cream"
+          //   } `}
+          // > */}
+        <div
+          className={`flex flex-col space-y-2 pb-4 md:hidden overflow-hidden transition-all duration-500 ease-in-out ${
+            open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          } ${isScrolled ? "" : "bg-cream"}`}
+        >
+          <Link
+            to="/"
+            className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+            onClick={() => setOpen(false)}
           >
-            <Link
-              to="/"
-              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
-              onClick={() => setOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              to="/about"
-              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
-              onClick={() => setOpen(false)}
-            >
-              About Us
-            </Link>
-            <Link
-              to="/gallery"
-              onClick={() => setOpen(false)}
-              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
-            >
-              Gallery
-            </Link>
-            <Link
-              to="/member"
-              onClick={() => setOpen(false)}
-              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
-            >
-              Member
-            </Link>
-            <Link
-              to="/community"
-              onClick={() => setOpen(false)}
-              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
-            >
-              Community
-            </Link>
-            <Link
-              to="/contact"
-              onClick={() => setOpen(false)}
-              className="px-3 py-2 text-sm font-medium hover:text-gray-900"
-            >
-              Contact
-            </Link>
-          </div>
-        )}
+            Home
+          </Link>
+          <Link
+            to="/about"
+            className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+            onClick={() => setOpen(false)}
+          >
+            About Us
+          </Link>
+          <Link
+            to="/gallery"
+            onClick={() => setOpen(false)}
+            className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+          >
+            Gallery
+          </Link>
+          <Link
+            to="/member"
+            onClick={() => setOpen(false)}
+            className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+          >
+            Member
+          </Link>
+          <Link
+            to="/community"
+            onClick={() => setOpen(false)}
+            className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+          >
+            Community
+          </Link>
+          <Link
+            to="/contact"
+            onClick={() => setOpen(false)}
+            className="px-3 py-2 text-sm font-medium hover:text-gray-900"
+          >
+            Contact
+          </Link>
+        </div>
+        {/* )} */}
       </div>
     </div>
   );
