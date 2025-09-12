@@ -15,8 +15,14 @@ const MemberForm = () => {
   const [isRedirecting, setIsRedirecting] = useState(false); // new state
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" });
+    let { name, value } = e.target;
+
+    if (name === "mobile") {
+      value = value.replace(/\D/g, "").slice(0, 10);
+    }
+
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: "" });
   };
 
   const validate = () => {
