@@ -9,7 +9,8 @@ const MemberForm = () => {
     mobile: "",
     password: "",
   });
-  const PANEL_URL = import.meta.env.PANEL_URL;
+  const PANEL_URL = import.meta.env.VITE_PANEL_URL;
+  console.log(PANEL_URL, "PANEL_URL");
   const { trigger: submitTrigger, loading: isApiLoading } = useApiMutation();
   const [errors, setErrors] = useState({});
   const [isRedirecting, setIsRedirecting] = useState(false); // new state
@@ -49,7 +50,7 @@ const MemberForm = () => {
       setErrors(newErrors);
       return;
     }
-
+    console.log(PANEL_URL, "PANEL_URL");
     const formDatas = new FormData();
     formDatas.append("username", formData.mobile);
     formDatas.append("password", formData.password);
