@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Mail, User, Lock } from "lucide-react";
+import { Mail, Lock, Loader } from "lucide-react";
 import InputField from "../common/InputField";
-import { showErrorToast, showSuccessToast } from "../../utils/toast";
+import { showErrorToast } from "../../utils/toast";
 import { useApiMutation } from "../../hooks/useApiMutation";
 
 const MemberForm = () => {
@@ -9,13 +9,12 @@ const MemberForm = () => {
     email: "",
     password: "",
   });
-  const { trigger: submitTrigger } = useApiMutation();
-
+  const { trigger: submitTrigger, loading: isApiLoading } = useApiMutation();
   const [errors, setErrors] = useState({});
+  const [isRedirecting, setIsRedirecting] = useState(false); // new state
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-
     setErrors({ ...errors, [e.target.name]: "" });
   };
 
@@ -23,7 +22,7 @@ const MemberForm = () => {
     let newErrors = {};
 
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+      newErrors.email = "UserName is required";
     }
     if (!formData.password.trim()) {
       newErrors.password = "Password is required";
@@ -34,32 +33,41 @@ const MemberForm = () => {
     return newErrors;
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   const newErrors = validate();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = validate();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
 
-  //   if (Object.keys(newErrors).length > 0) {
-  //     setErrors(newErrors);
-  //   } else {
-  //     console.log("Form submitted:", formData);
-  //     // showSuccessToast("Member created successfully!");
-  //     showErrorToast("Something went wrong");
-  //   }
-  // };
-const handleSubmit = async (e) => {
-  e.preventDefault();
+    const formDatas = new FormData();
+    formDatas.append("username", formData.email);
+    formDatas.append("password", formData.password);
 
-  try {
-    const email = encodeURIComponent(formData.email);
-    const password = encodeURIComponent(formData.password);
+    try {
+      const res = await submitTrigger({
+        url: "/panel-login",
+        method: "post",
+        data: formDatas,
+      });
 
-    // Redirect with params
-    window.location.href = `http://localhost:5173/login?email=${email}&password=${password}`;
-  } catch (error) {
-    showErrorToast("Something went wrong");
-  }
-};
+      const email = encodeURIComponent(formData.email);
+      const password = encodeURIComponent(formData.password);
 
+      if (res.code === 200 && res.UserInfo?.token) {
+        setIsRedirecting(true); // keep loading while redirecting
+        window.location.href = `https://dhakshinekkam-crm.netlify.app/login?email=${email}&password=${password}`;
+      } else {
+        showErrorToast(res?.message || "Login failed: Unexpected response.");
+      }
+    } catch (error) {
+      showErrorToast(error.response?.data?.message || "Please try again.");
+    }
+  };
+
+  // button should show loading if API is in progress OR redirecting
+  const isLoading = isApiLoading || isRedirecting;
 
   return (
     <form
@@ -70,7 +78,6 @@ const handleSubmit = async (e) => {
 
       <InputField
         label="Email"
-        // type="email"
         name="email"
         value={formData.email}
         onChange={handleChange}
@@ -92,9 +99,19 @@ const handleSubmit = async (e) => {
 
       <button
         type="submit"
-        className="w-full mt-3 bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg transition"
+        disabled={isLoading}
+        className={`w-full mt-3 flex items-center justify-center bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg transition ${
+          isLoading ? "opacity-70 cursor-not-allowed" : ""
+        }`}
       >
-        Submit
+        {isLoading ? (
+          <>
+            <Loader className="h-5 w-5 animate-spin mr-2" />
+            {isRedirecting ? "Redirecting..." : "Logging in..."}
+          </>
+        ) : (
+          "Submit"
+        )}
       </button>
     </form>
   );
