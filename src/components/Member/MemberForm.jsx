@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Mail, User, Lock } from "lucide-react";
 import InputField from "../common/InputField";
+import { showErrorToast, showSuccessToast } from "../../utils/toast";
+import { useApiMutation } from "../../hooks/useApiMutation";
 
 const MemberForm = () => {
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
   });
+  const { trigger: submitTrigger } = useApiMutation();
 
   const [errors, setErrors] = useState({});
 
@@ -22,8 +24,6 @@ const MemberForm = () => {
 
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
     }
     if (!formData.password.trim()) {
       newErrors.password = "Password is required";
@@ -34,17 +34,32 @@ const MemberForm = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newErrors = validate();
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const newErrors = validate();
 
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-    } else {
-      console.log("Form submitted:", formData);
-      alert("Form submitted successfully ✅");
-    }
-  };
+  //   if (Object.keys(newErrors).length > 0) {
+  //     setErrors(newErrors);
+  //   } else {
+  //     console.log("Form submitted:", formData);
+  //     // showSuccessToast("Member created successfully!");
+  //     showErrorToast("Something went wrong");
+  //   }
+  // };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const email = encodeURIComponent(formData.email);
+    const password = encodeURIComponent(formData.password);
+
+    // Redirect with params
+    window.location.href = `http://localhost:5173/login?email=${email}&password=${password}`;
+  } catch (error) {
+    showErrorToast("Something went wrong");
+  }
+};
+
 
   return (
     <form
@@ -53,19 +68,9 @@ const MemberForm = () => {
     >
       <h2 className="text-xl font-semibold mb-4 text-gray-800">Member Area</h2>
 
-      {/* <InputField
-        label="Full Name"
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-        placeholder="Enter your name"
-        startIcon={<User size={18} />}
-        error={errors.name}
-      /> */}
-
       <InputField
         label="Email"
-        type="email"
+        // type="email"
         name="email"
         value={formData.email}
         onChange={handleChange}

@@ -1,12 +1,18 @@
 import {
   Book,
+  Briefcase,
   Calendar,
+  Droplet,
+  GitBranch,
   Group,
   Heart,
+  Home,
   Loader,
   Mail,
+  MapPin,
+  MessageCircle,
   Phone,
-  User
+  User,
 } from "lucide-react";
 import { useRef, useState } from "react";
 import { MarriedStatus } from "../../constants/selectOptions";
@@ -185,6 +191,7 @@ const CommunityForm = ({ isEditMode = false }) => {
           name="middle_name"
           value={formData.middle_name}
           onChange={handleChange}
+          startIcon={<User size={18} />}
           placeholder="Enter middle name"
         />
         <InputField
@@ -192,6 +199,7 @@ const CommunityForm = ({ isEditMode = false }) => {
           name="last_name"
           value={formData.last_name}
           onChange={handleChange}
+          startIcon={<User size={18} />}
           placeholder="Enter last name"
         />
 
@@ -220,6 +228,7 @@ const CommunityForm = ({ isEditMode = false }) => {
           error={errors.user_blood_group}
           required
           ref={fieldRefs.user_blood_group}
+          startIcon={<Droplet size={18} />}
         />
 
         {/* Contact */}
@@ -254,6 +263,7 @@ const CommunityForm = ({ isEditMode = false }) => {
           value={formData.user_whatsapp}
           onChange={handleChange}
           placeholder="Enter WhatsApp number"
+          startIcon={<MessageCircle size={18} />}
         />
 
         {/* Address */}
@@ -264,6 +274,7 @@ const CommunityForm = ({ isEditMode = false }) => {
           value={formData.place_of_residence}
           onChange={handleChange}
           placeholder="Enter place of residence"
+          startIcon={<Home size={18} />}
         />
         <InputField
           label="Native Place"
@@ -271,6 +282,7 @@ const CommunityForm = ({ isEditMode = false }) => {
           value={formData.native_place}
           onChange={handleChange}
           placeholder="Enter native place"
+          startIcon={<MapPin size={18} />}
         />
 
         {/* Education & Occupation */}
@@ -296,6 +308,7 @@ const CommunityForm = ({ isEditMode = false }) => {
           error={errors.user_occupation}
           required
           ref={fieldRefs.user_occupation}
+          startIcon={<Briefcase size={18} />}
         />
         <SelectField
           label="Branch"
@@ -311,6 +324,7 @@ const CommunityForm = ({ isEditMode = false }) => {
           error={errors.branch_id}
           required
           ref={fieldRefs.branch_id}
+          startIcon={<GitBranch size={18} />}
         />
 
         <SelectField
@@ -320,6 +334,7 @@ const CommunityForm = ({ isEditMode = false }) => {
           onChange={handleChange}
           options={MarriedStatus}
           error={errors.user_married_status}
+          startIcon={<Heart size={18} />}
         />
 
         <InputField

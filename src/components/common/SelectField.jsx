@@ -27,6 +27,7 @@ const CustomSelect = ({
   placeholder,
   required,
   ref,
+  startIcon,
 }) => {
   const [open, setOpen] = useState(false);
   const [highlighted, setHighlighted] = useState(-1);
@@ -93,11 +94,14 @@ const CustomSelect = ({
             : "border-gray-300 focus:ring-yellow-400"
         }`}
       >
-        <span className={`${value ? "text-gray-800" : "text-gray-400"}`}>
-          {options.find((opt) => opt.value === value)?.label ||
-            placeholder ||
-            `Select ${label}`}
-        </span>
+        <div className="flex items-center gap-2">
+          {startIcon && <span className="text-gray-600">{startIcon}</span>}
+          <span className={`${value ? "text-gray-800" : "text-gray-400"}`}>
+            {options.find((opt) => opt.value === value)?.label ||
+              placeholder ||
+              `Select ${label}`}
+          </span>
+        </div>
         <Chevron
           className={`w-4 h-4 text-gray-600 transition-transform ${
             open ? "rotate-180" : ""

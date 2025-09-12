@@ -171,7 +171,7 @@ const ContactForm = () => {
             <img
               src="/img/contact.webp"
               alt="Contact"
-              className="rounded-lg w-full h-auto"
+  style={{ borderRadius: "0.5rem", width: "100%", maxHeight: "600px" }}
             />
           </div>
         </div>
