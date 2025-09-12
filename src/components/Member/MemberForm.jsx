@@ -6,7 +6,7 @@ import { useApiMutation } from "../../hooks/useApiMutation";
 
 const MemberForm = () => {
   const [formData, setFormData] = useState({
-    email: "",
+    mobile: "",
     password: "",
   });
   const PANEL_URL = import.meta.env.PANEL_URL;
@@ -45,7 +45,7 @@ const MemberForm = () => {
     }
 
     const formDatas = new FormData();
-    formDatas.append("username", formData.email);
+    formDatas.append("username", formData.mobile);
     formDatas.append("password", formData.password);
 
     try {
@@ -55,7 +55,7 @@ const MemberForm = () => {
         data: formDatas,
       });
 
-      const email = encodeURIComponent(formData.email);
+      const email = encodeURIComponent(formData.mobile);
       const password = encodeURIComponent(formData.password);
 
       if (res.code === 200 && res.UserInfo?.token) {
@@ -79,12 +79,12 @@ const MemberForm = () => {
 
       <InputField
         label="Mobile"
-        name="email"
-        value={formData.email}
+        name="mobile"
+        value={formData.mobile}
         onChange={handleChange}
         placeholder="Enter your mobile"
         startIcon={<Phone size={18} />}
-        error={errors.email}
+        error={errors.mobile}
       />
 
       <InputField
