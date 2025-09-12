@@ -56,9 +56,9 @@ const ContactInfo = () => {
             className="rounded-xl w-full shadow-md"
           ></iframe>
         </div> */}
-        <LazyMap />
+   
       </div>
-      <div className="border-b border-solid border-border mt-12"></div>
+      {/* <div className="border-b border-solid border-border mt-12"></div> */}
     </section>
   );
 };

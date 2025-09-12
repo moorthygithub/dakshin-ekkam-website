@@ -1,29 +1,38 @@
 import { useState } from "react";
-import { Mail, User, Lock } from "lucide-react";
+import { Mail, Lock, Loader, Phone } from "lucide-react";
 import InputField from "../common/InputField";
+import { showErrorToast } from "../../utils/toast";
+import { useApiMutation } from "../../hooks/useApiMutation";
 
 const MemberForm = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
+    mobile: "",
     password: "",
   });
-
+  const PANEL_URL = import.meta.env.VITE_PANEL_URL;
+  console.log(PANEL_URL, "PANEL_URL");
+  const { trigger: submitTrigger, loading: isApiLoading } = useApiMutation();
   const [errors, setErrors] = useState({});
+  const [isRedirecting, setIsRedirecting] = useState(false); // new state
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    let { name, value } = e.target;
 
-    setErrors({ ...errors, [e.target.name]: "" });
+    if (name === "mobile") {
+      value = value.replace(/\D/g, "").slice(0, 10);
+    }
+
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: "" });
   };
 
   const validate = () => {
     let newErrors = {};
 
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
+    if (!formData.mobile.trim()) {
+      newErrors.mobile = "Mobile number is required";
+    } else if (!/^\d{10}$/.test(formData.mobile)) {
+      newErrors.mobile = "Mobile number must be exactly 10 digits";
     }
     if (!formData.password.trim()) {
       newErrors.password = "Password is required";
@@ -34,17 +43,39 @@ const MemberForm = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validate();
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-    } else {
-      console.log("Form submitted:", formData);
-      alert("Form submitted successfully ✅");
+      return;
+    }
+    console.log(PANEL_URL, "PANEL_URL");
+    const formDatas = new FormData();
+    formDatas.append("username", formData.mobile);
+    formDatas.append("password", formData.password);
+
+    try {
+      const res = await submitTrigger({
+        url: "/panel-login",
+        method: "post",
+        data: formDatas,
+      });
+
+      const email = encodeURIComponent(formData.mobile);
+      const password = encodeURIComponent(formData.password);
+
+      if (res.code === 200 && res.UserInfo?.token) {
+        setIsRedirecting(true);
+        window.location.href = `${PANEL_URL}/login?email=${email}&password=${password}`;
+      } else {
+        showErrorToast(res?.message || "Login failed: Unexpected response.");
+      }
+    } catch (error) {
+      showErrorToast(error.response?.data?.message || "Please try again.");
     }
   };
+  const isLoading = isApiLoading || isRedirecting;
 
   return (
     <form
@@ -53,25 +84,14 @@ const MemberForm = () => {
     >
       <h2 className="text-xl font-semibold mb-4 text-gray-800">Member Area</h2>
 
-      {/* <InputField
-        label="Full Name"
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-        placeholder="Enter your name"
-        startIcon={<User size={18} />}
-        error={errors.name}
-      /> */}
-
       <InputField
-        label="Email"
-        type="email"
-        name="email"
-        value={formData.email}
+        label="Mobile"
+        name="mobile"
+        value={formData.mobile}
         onChange={handleChange}
-        placeholder="Enter your email"
-        startIcon={<Mail size={18} />}
-        error={errors.email}
+        placeholder="Enter your mobile"
+        startIcon={<Phone size={18} />}
+        error={errors.mobile}
       />
 
       <InputField
@@ -87,9 +107,19 @@ const MemberForm = () => {
 
       <button
         type="submit"
-        className="w-full mt-3 bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg transition"
+        disabled={isLoading}
+        className={`w-full mt-3 flex items-center justify-center bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg transition ${
+          isLoading ? "opacity-70 cursor-not-allowed" : ""
+        }`}
       >
-        Submit
+        {isLoading ? (
+          <>
+            <Loader className="h-5 w-5 animate-spin mr-2" />
+            {isRedirecting ? "Redirecting..." : "Logging in..."}
+          </>
+        ) : (
+          "Submit"
+        )}
       </button>
     </form>
   );

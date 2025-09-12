@@ -2,6 +2,7 @@ import PageMeta from "../../components/common/PageMeta";
 import ContactForm from "../../components/ContactForm/ContactForm";
 import ContactInfo from "../../components/ContactForm/ContactInfo";
 import ContactLocation from "../../components/ContactForm/ContactLocation";
+import LazyMap from "../../components/ContactForm/LazyMap";
 import HeroSub from "../../components/HeroSub";
 
 const Contact = () => {
@@ -19,6 +20,7 @@ const Contact = () => {
       />
       <ContactInfo />
       <ContactForm />
+      <LazyMap />
       <ContactLocation />
     </>
   );
