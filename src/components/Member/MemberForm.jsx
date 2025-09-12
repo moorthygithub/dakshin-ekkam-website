@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Lock, Loader } from "lucide-react";
+import { Mail, Lock, Loader, Phone } from "lucide-react";
 import InputField from "../common/InputField";
 import { showErrorToast } from "../../utils/toast";
 import { useApiMutation } from "../../hooks/useApiMutation";
@@ -9,6 +9,7 @@ const MemberForm = () => {
     email: "",
     password: "",
   });
+  const PANEL_URL = import.meta.env.PANEL_URL;
   const { trigger: submitTrigger, loading: isApiLoading } = useApiMutation();
   const [errors, setErrors] = useState({});
   const [isRedirecting, setIsRedirecting] = useState(false); // new state
@@ -21,8 +22,10 @@ const MemberForm = () => {
   const validate = () => {
     let newErrors = {};
 
-    if (!formData.email.trim()) {
-      newErrors.email = "UserName is required";
+    if (!formData.mobile.trim()) {
+      newErrors.mobile = "Mobile number is required";
+    } else if (!/^\d{10}$/.test(formData.mobile)) {
+      newErrors.mobile = "Mobile number must be exactly 10 digits";
     }
     if (!formData.password.trim()) {
       newErrors.password = "Password is required";
@@ -56,8 +59,8 @@ const MemberForm = () => {
       const password = encodeURIComponent(formData.password);
 
       if (res.code === 200 && res.UserInfo?.token) {
-        setIsRedirecting(true); // keep loading while redirecting
-        window.location.href = `https://dhakshinekkam-crm.netlify.app/login?email=${email}&password=${password}`;
+        setIsRedirecting(true);
+        window.location.href = `${PANEL_URL}/login?email=${email}&password=${password}`;
       } else {
         showErrorToast(res?.message || "Login failed: Unexpected response.");
       }
@@ -65,8 +68,6 @@ const MemberForm = () => {
       showErrorToast(error.response?.data?.message || "Please try again.");
     }
   };
-
-  // button should show loading if API is in progress OR redirecting
   const isLoading = isApiLoading || isRedirecting;
 
   return (
@@ -77,12 +78,12 @@ const MemberForm = () => {
       <h2 className="text-xl font-semibold mb-4 text-gray-800">Member Area</h2>
 
       <InputField
-        label="Email"
+        label="Mobile"
         name="email"
         value={formData.email}
         onChange={handleChange}
-        placeholder="Enter your email"
-        startIcon={<Mail size={18} />}
+        placeholder="Enter your mobile"
+        startIcon={<Phone size={18} />}
         error={errors.email}
       />
 
